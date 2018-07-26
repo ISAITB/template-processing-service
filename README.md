@@ -23,7 +23,7 @@ mvn clean install
 To perform a release and deploy to the Central Repository the profile `release` needs to be specified:
 
 ```
-mvn clean install -P release
+mvn clean deploy -P release
 ``` 
 
 This profile triggers in addition the following:
