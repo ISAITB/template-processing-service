@@ -1,3 +1,4 @@
+#set($dollar = '$')
 package ${package}.gitb;
 
 import com.gitb.core.*;
@@ -32,10 +33,10 @@ public class ProcessingServiceImpl implements ProcessingService {
     /** The name of the output to return the processing result. */
     public static final String OUTPUT__OUTPUT = "output";
 
-    @Value("${service.id}")
+    @Value("${dollar}{service.id}")
     private String serviceId = null;
 
-    @Value("${service.version}")
+    @Value("${dollar}{service.version}")
     private String serviceVersion = null;
 
     @Autowired
