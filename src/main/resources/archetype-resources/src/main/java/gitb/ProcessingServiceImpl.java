@@ -54,11 +54,18 @@ public class ProcessingServiceImpl implements ProcessingService {
      *     <li>Operation 'uppercase' with one input for the text to process and one output with the result.</li>
      *     <li>Operation 'lowercase' with one input for the text to process and one output with the result.</li>
      * </ul>
-     * Note that defining output messages is optional as any and all output will be send back to the test bed regardless.
-     * It is important however to define all expected inputs here as these are checked by the test bed before making the
-     * actual call. You may define inputs as required in which case the test bed itself will check that they are provided
-     * before actually making the call. Alternatively you can define inputs as optional and check them as part of the
-     * processing operation.
+     * Note that defining the implementation of this service is optional. If the service is not going to be published
+     * for third parties to use in other test bed instances, you can simple define an empty implementation as follows:
+     * <pre>
+     * public GetModuleDefinitionResponse getModuleDefinition(Void parameters) {
+     *     return new GetModuleDefinitionResponse();
+     * }
+     * </pre>
+     *
+     * In case you choose to implement this service, note that the outputs definition is optional as all outputs will
+     * be sent back to the test bed regardless. Regarding inputs you may need to define them as optional if these
+     * vary depending on the action you plan on taking. Even if an input is defined as optional, you can always check
+     * in your process implementation to see if it was provided depending on the action to take place.
      *
      * @param parameters No parameters are expected.
      * @return The response.
@@ -145,6 +152,13 @@ public class ProcessingServiceImpl implements ProcessingService {
     @Override
     public BeginTransactionResponse beginTransaction(BeginTransactionRequest beginTransactionRequest) {
         BeginTransactionResponse response = new BeginTransactionResponse();
+        /*
+         * Here we generate the session identifier but we could also have reused the test session identifier
+         * form the test bed (and not set it on the response). Nonetheless generating a separate identifier could
+         * be interesting if for example we need to do processing transactions in parallel in the same test session.
+         *
+         * For more information see: https://www.itb.ec.europa.eu/docs/services/latest/common/index.html#retrieving-test-session-metadata
+         */
         String sessionId = sessionManager.createSession();
         response.setSessionId(sessionId);
         LOG.info("Starting processing session [{}]", sessionId);
